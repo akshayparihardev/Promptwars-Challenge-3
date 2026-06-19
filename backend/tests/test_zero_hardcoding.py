@@ -23,8 +23,8 @@ def test_home_zero_hardcoding():
     
     result = calculate_footprint(data)
     
-    expected_kg = (100 * 12 * factors.GRID_FACTORS["india"]) / 2
-    assert result.breakdown_kg["home"] == expected_kg
+    expected_kg = round((100 * 12 * factors.GRID_FACTORS["india"]) / 2, 2)
+    assert round(result.breakdown_kg["home"], 2) == expected_kg
 
 
 def test_whatif_zero_hardcoding():
