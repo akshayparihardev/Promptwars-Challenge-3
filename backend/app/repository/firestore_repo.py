@@ -18,7 +18,7 @@ class FirestoreEntryRepository(EntryRepository):
     """Stores entries in a Google Cloud Firestore collection."""
 
     def __init__(self, project_id: str, collection_name: str = "footprint_entries"):
-        from google.cloud import firestore  # type: ignore[attr-defined]
+        from google.cloud import firestore
 
         # We rely on Application Default Credentials here.
         self._db = firestore.Client(project=project_id)

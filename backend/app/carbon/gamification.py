@@ -17,7 +17,7 @@ def generate_gamification(data: CarbonInput, result: FootprintResult) -> Challen
 
     # 1. Transport Challenges
     if data.transport.car_km_per_week > 50:
-        savings_kg = (data.transport.car_km_per_week * 0.2 * 52) * factors.CAR_EMISSIONS_KG_PER_KM[data.transport.car_fuel]
+        savings_kg = (data.transport.car_km_per_week * 0.2 * 52) * factors.CAR_FACTORS_PER_KM[data.transport.car_fuel]
         challenges.append(EcoChallenge(
             id=str(uuid.uuid4()),
             title="Car-Free Days",
@@ -30,7 +30,7 @@ def generate_gamification(data: CarbonInput, result: FootprintResult) -> Challen
         ))
     
     if data.transport.short_haul_flights_per_year > 0:
-        savings_kg = factors.FLIGHT_EMISSIONS_KG["short_haul"]
+        savings_kg = factors.FLIGHT_SHORT_HAUL_PER_KM * factors.SHORT_HAUL_TRIP_KM
         challenges.append(EcoChallenge(
             id=str(uuid.uuid4()),
             title="Ground Travel Pioneer",
