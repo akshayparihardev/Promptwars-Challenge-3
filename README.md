@@ -3,6 +3,8 @@
 [![CI](https://github.com/YourUsername/PromptWars-Challenge-3/actions/workflows/ci.yml/badge.svg)](https://github.com/YourUsername/PromptWars-Challenge-3/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
+🚀 **Live App:** [https://carbon-platform-bddp.onrender.com/](https://carbon-platform-bddp.onrender.com/)
+
 > **Virtual PromptWars — Challenge 3.** A web app that helps individuals
 > **understand, track, and reduce** their personal carbon footprint through
 > simple inputs, **localized context**, and **personalized, AI-generated insights**.
