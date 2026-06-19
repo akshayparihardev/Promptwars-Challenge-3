@@ -1,32 +1,45 @@
-"""
-Centralized configuration module.
+"""Application configuration via environment variables (12-factor style).
 
-Why: All secrets and tunables live here so no controller ever imports os.environ
-directly. Pydantic Settings validates presence at startup, failing fast if a
-required key is missing — preventing silent runtime errors in production.
+Uses pydantic-settings so configuration is validated and centralised. No secret
+values live here — credentials for Vertex AI and Firestore come from Application
+Default Credentials (the Cloud Run service account in production, `gcloud auth
+application-default login` locally).
 """
 
-from pydantic_settings import BaseSettings
+from __future__ import annotations
+
+from functools import lru_cache
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    """Application-wide settings loaded from environment variables."""
+    """Validated application settings, sourced from the environment / .env."""
 
-    google_maps_api_key: str
-    climatiq_api_key: str
-    google_tim_api_key: str
-    google_genai_api_key: str
+    model_config = SettingsConfigDict(
+        env_file=".env", env_file_encoding="utf-8", extra="ignore"
+    )
 
-    # Non-secret tunables
-    backend_port: int = 8000
-    climatiq_cache_maxsize: int = 256
-    climatiq_cache_ttl: int = 3600  # seconds
+    # Google Cloud
+    project_id: str = "carbon-footprint-platform"
+    region: str = "us-central1"
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
+    # Feature flags — let the app degrade gracefully without GCP access.
+    use_gemini: bool = True
+    use_firestore: bool = True
+    use_bigquery: bool = False
+    gemini_model: str = "gemini-2.5-flash"
+
+    # CORS (the SPA is same-origin in prod; this matters for local dev).
+    allowed_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
+
+    @property
+    def origins_list(self) -> list[str]:
+        """Parse the comma-separated CORS origins into a clean list."""
+        return [o.strip() for o in self.allowed_origins.split(",") if o.strip()]
 
 
-# Singleton — instantiated once at import time so FastAPI dependency
-# injection can reference the same object across all routes.
-settings = Settings()
+@lru_cache
+def get_settings() -> Settings:
+    """Return the cached settings singleton (read once per process)."""
+    return Settings()

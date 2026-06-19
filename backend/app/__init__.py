@@ -1,1 +1,3 @@
-# EcoAgent Backend — FastAPI application package
+"""Carbon Footprint Awareness Platform — backend package."""
+
+__version__ = "1.0.0"

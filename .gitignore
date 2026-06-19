@@ -1,36 +1,26 @@
-# Dependencies
-node_modules/
+# Python
 __pycache__/
-*.pyc
-.venv/
-venv/
-env/
-
-# Environment secrets
+*.py[cod]
+*$py.class
 .env
-.env.local
-.env.*.local
+.venv
+env/
+venv/
+ENV/
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
 
-# Build outputs
-.next/
-out/
+# Node
+node_modules/
 dist/
-build/
+dist-ssr/
+*.local
 
-# IDE
+# Editor
 .vscode/
 .idea/
 *.swp
-*.swo
-
-# OS
 .DS_Store
-Thumbs.db
-
-# Python
-*.egg-info/
-*.egg
-pip-log.txt
-
-# Docker
-docker-compose.override.yml
