@@ -1,7 +1,5 @@
 """Gamification API route for eco-challenges and achievements."""
 
-from __future__ import annotations
-
 from fastapi import APIRouter, Request
 from slowapi import Limiter
 from slowapi.util import get_remote_address
