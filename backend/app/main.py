@@ -51,7 +51,7 @@ def create_app() -> FastAPI:
     )
 
     app.state.limiter = limiter
-    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore
 
     # CORS — restricted to configured origins (SPA is same-origin in production).
     app.add_middleware(
