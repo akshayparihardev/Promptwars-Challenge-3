@@ -1,4 +1,4 @@
-import { CarbonInput, FootprintResult, InsightsResponse, Entry, WhatIfOverride, WhatIfResult } from "./types";
+import { CarbonInput, FootprintResult, InsightsResponse, Entry, WhatIfOverride, WhatIfResult, ChallengesResponse } from "./types";
 
 const API_BASE = "/api";
 
@@ -25,6 +25,19 @@ export async function getInsights(
     body: JSON.stringify({ ...input, result }),
   });
   if (!res.ok) throw new Error("Failed to generate insights");
+  return res.json();
+}
+
+export async function getGamification(
+  input: CarbonInput,
+  result: FootprintResult
+): Promise<ChallengesResponse> {
+  const res = await fetch(`${API_BASE}/gamification`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ input, result }),
+  });
+  if (!res.ok) throw new Error("Failed to load challenges");
   return res.json();
 }
 

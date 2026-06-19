@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { CarbonInput, FootprintResult, InsightsResponse } from "../lib/types";
-import { calculateFootprint, getInsights, saveEntry } from "../lib/api";
+import { CarbonInput, FootprintResult, InsightsResponse, ChallengesResponse } from "../lib/types";
+import { calculateFootprint, getInsights, getGamification, saveEntry } from "../lib/api";
 import { getDeviceId } from "../lib/deviceId";
 
 export function useFootprint() {
@@ -8,6 +8,7 @@ export function useFootprint() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<FootprintResult | null>(null);
   const [insights, setInsights] = useState<InsightsResponse | null>(null);
+  const [gamification, setGamification] = useState<ChallengesResponse | null>(null);
 
   const calculate = async (input: CarbonInput) => {
     setLoading(true);
@@ -17,13 +18,26 @@ export function useFootprint() {
       const res = await calculateFootprint(input);
       setResult(res);
 
-      // 2. Fetch insights using the result
+      // 2. Fetch insights and gamification
       try {
-        const ins = await getInsights(input, res);
-        setInsights(ins);
+        const [insResult, gamResult] = await Promise.allSettled([
+          getInsights(input, res),
+          getGamification(input, res)
+        ]);
+
+        if (insResult.status === "fulfilled") {
+          setInsights(insResult.value);
+        } else {
+          console.error("Insights failed", insResult.reason);
+        }
+
+        if (gamResult.status === "fulfilled") {
+          setGamification(gamResult.value);
+        } else {
+          console.error("Gamification failed", gamResult.reason);
+        }
       } catch (e) {
-        console.error("Insights failed, but footprint succeeded", e);
-        // We still have the result, so don't completely fail
+        console.error("Secondary data fetch failed", e);
       }
 
       // 3. Save to history asynchronously
@@ -41,5 +55,5 @@ export function useFootprint() {
     }
   };
 
-  return { calculate, loading, error, result, insights };
+  return { calculate, loading, error, result, insights, gamification };
 }

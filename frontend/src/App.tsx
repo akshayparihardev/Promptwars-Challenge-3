@@ -1,17 +1,20 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { CalculatorForm } from './components/CalculatorForm'
-import { ResultBreakdown } from './components/ResultBreakdown'
-import { InsightsPanel } from './components/InsightsPanel'
-import { WhatIfSimulator } from './components/WhatIfSimulator'
 import { HistoryPanel } from './components/HistoryPanel'
-import { CarbonCard } from './components/CarbonCard'
 import { useFootprint } from './hooks/useFootprint'
 import { Entry, emptyInput, CarbonInput } from './lib/types'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Leaf, Zap, BarChart3, SlidersHorizontal } from 'lucide-react'
 
+// Lazy-load heavy visualisation components for code-splitting
+const ResultBreakdown = lazy(() => import('./components/ResultBreakdown').then(m => ({ default: m.ResultBreakdown })))
+const InsightsPanel = lazy(() => import('./components/InsightsPanel').then(m => ({ default: m.InsightsPanel })))
+const GamificationPanel = lazy(() => import('./components/GamificationPanel').then(m => ({ default: m.GamificationPanel })))
+const WhatIfSimulator = lazy(() => import('./components/WhatIfSimulator').then(m => ({ default: m.WhatIfSimulator })))
+const CarbonCard = lazy(() => import('./components/CarbonCard').then(m => ({ default: m.CarbonCard })))
+
 function App() {
-  const { calculate, loading, error, result, insights } = useFootprint()
+  const { calculate, loading, error, result, insights, gamification } = useFootprint()
   const [currentInput, setCurrentInput] = useState<CarbonInput>(emptyInput())
 
   const handleSubmit = (input: CarbonInput) => {
@@ -28,8 +31,12 @@ function App() {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
 
+      {/* Accessibility: skip link for keyboard users */}
+      <a href="#main-content" className="skip-link">Skip to main content</a>
+
       {/* ── Top nav ── */}
-      <nav style={{
+      <header>
+      <nav aria-label="Main navigation" style={{
         position: "sticky", top: 0, zIndex: 50,
         background: "rgba(2,4,8,0.85)", backdropFilter: "blur(20px)",
         borderBottom: "1px solid rgba(255,255,255,0.06)",
@@ -60,9 +67,10 @@ function App() {
           }}>✦ Gemini AI Powered</span>
         </div>
       </nav>
+      </header>
 
       {/* ── Split layout ── */}
-      <div style={{ flex: 1, display: "grid", gridTemplateColumns: "420px 1fr", maxHeight: "calc(100vh - 60px)" }}>
+      <main id="main-content" role="main" style={{ flex: 1, display: "grid", gridTemplateColumns: "420px 1fr", maxHeight: "calc(100vh - 60px)" }}>
 
         {/* LEFT — Form panel (sticky scroll) */}
         <div style={{
@@ -105,14 +113,14 @@ function App() {
           </div>
 
           {/* Footer credits */}
-          <p style={{ marginTop: 32, fontSize: 10, color: "var(--text-3)", lineHeight: 1.7, textAlign: "center" }}>
-            Factors: DEFRA 2023 · CEA 2023 · EPA · EMBER · IEA<br />
-            PromptWars Challenge 3 Submission
-          </p>
+          <footer style={{ marginTop: 32, fontSize: 10, color: "var(--text-3)", lineHeight: 1.7, textAlign: "center" }}>
+            <p>Factors: DEFRA 2023 · CEA 2023 · EPA · EMBER · IEA<br />
+            PromptWars Challenge 3 Submission</p>
+          </footer>
         </div>
 
         {/* RIGHT — Results panel */}
-        <div style={{ overflowY: "auto", padding: "32px 36px", background: "var(--bg)" }}>
+        <div aria-live="polite" aria-atomic="false" style={{ overflowY: "auto", padding: "32px 36px", background: "var(--bg)" }}>
           <AnimatePresence mode="wait">
 
             {/* Empty state */}
@@ -185,9 +193,11 @@ function App() {
                 style={{ display: "flex", flexDirection: "column", gap: 24 }}>
 
                 {/* Main result card */}
+                <Suspense fallback={<div style={{ textAlign: 'center', color: 'var(--text-3)', padding: 32 }}>Loading results…</div>}>
                 <div className="glass" style={{ padding: 32 }}>
                   <ResultBreakdown result={result} />
                   {insights && <InsightsPanel insights={insights} />}
+                  {gamification && <GamificationPanel data={gamification} />}
                 </div>
 
                 {/* What-If + Card */}
@@ -195,11 +205,12 @@ function App() {
                   <WhatIfSimulator baseInput={currentInput} />
                   <CarbonCard result={result} />
                 </div>
+                </Suspense>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
-      </div>
+      </main>
     </div>
   )
 }

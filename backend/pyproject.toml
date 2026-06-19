@@ -12,7 +12,7 @@ asyncio_mode = "auto"
 pythonpath = ["."]
 
 [tool.mypy]
-strict = false
+strict = true
 ignore_missing_imports = true
 warn_unreachable = true
 plugins = ["pydantic.mypy"]

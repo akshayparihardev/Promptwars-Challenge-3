@@ -1,10 +1,11 @@
+import React from "react";
 import { FootprintResult } from "../lib/types";
 import { formatNumber } from "../lib/format";
 import html2canvas from "html2canvas";
 import { useRef, useState } from "react";
 import { Download } from "lucide-react";
 
-export function CarbonCard({ result }: { result: FootprintResult }) {
+function CarbonCardInner({ result }: { result: FootprintResult }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [downloading, setDownloading] = useState(false);
 
@@ -79,3 +80,5 @@ export function CarbonCard({ result }: { result: FootprintResult }) {
     </div>
   );
 }
+
+export const CarbonCard = React.memo(CarbonCardInner);

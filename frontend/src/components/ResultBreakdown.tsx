@@ -1,3 +1,4 @@
+import React from "react";
 import { FootprintResult } from "../lib/types";
 import { formatNumber } from "../lib/format";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
@@ -22,7 +23,7 @@ function InsightTag({ tag }: { tag: string }) {
   return <span className={`tag ${map[tag] ?? "tag-cyan"}`}>{tag}</span>;
 }
 
-export function ResultBreakdown({ result }: { result: FootprintResult }) {
+function ResultBreakdownInner({ result }: { result: FootprintResult }) {
   const total_t = result.total_annual_tonnes;
   const cats = Object.entries(result.breakdown_kg)
     .map(([k, v]) => ({ ...CAT[k as keyof typeof CAT], key: k, kg: v }))
@@ -114,7 +115,7 @@ export function ResultBreakdown({ result }: { result: FootprintResult }) {
         </div>
 
         {/* Donut */}
-        <div style={{ height: 160 }}>
+        <div style={{ height: 160 }} role="img" aria-label={`Pie chart showing carbon footprint breakdown across ${cats.length} categories`}>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie data={pieData} cx="50%" cy="50%" innerRadius={46} outerRadius={68}
@@ -133,7 +134,7 @@ export function ResultBreakdown({ result }: { result: FootprintResult }) {
         <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: 14 }}>
           How you compare
         </p>
-        <div style={{ height: 140 }}>
+        <div style={{ height: 140 }} role="img" aria-label={`Bar chart comparing your footprint of ${total_t.toFixed(2)} tonnes to regional and global benchmarks`}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={barData} barSize={40}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
@@ -173,3 +174,5 @@ export function ResultBreakdown({ result }: { result: FootprintResult }) {
     </div>
   );
 }
+
+export const ResultBreakdown = React.memo(ResultBreakdownInner);

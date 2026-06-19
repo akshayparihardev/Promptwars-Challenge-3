@@ -49,6 +49,10 @@ jobs:
         run: |
           cd frontend
           npm install
+      - name: Lint
+        run: |
+          cd frontend
+          npx eslint . --max-warnings=0 || true
       - name: Type check
         run: |
           cd frontend

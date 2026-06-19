@@ -1,3 +1,4 @@
+import React from "react";
 import { InsightsResponse } from "../lib/types";
 import { formatNumber } from "../lib/format";
 import { motion } from "framer-motion";
@@ -9,7 +10,7 @@ const DIFFICULTY_META = {
   hard:   { label: "Hard",   color: "#ef4444", bg: "rgba(239,68,68,0.1)" },
 };
 
-export function InsightsPanel({ insights }: { insights: InsightsResponse }) {
+function InsightsPanelInner({ insights }: { insights: InsightsResponse }) {
   return (
     <div className="flex flex-col gap-5 mt-6 pt-6 border-t border-gray-800">
       <div className="flex items-center justify-between">
@@ -66,3 +67,5 @@ export function InsightsPanel({ insights }: { insights: InsightsResponse }) {
     </div>
   );
 }
+
+export const InsightsPanel = React.memo(InsightsPanelInner);

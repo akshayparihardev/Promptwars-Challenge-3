@@ -20,7 +20,7 @@ from slowapi.util import get_remote_address
 
 from app import __version__
 from app.config import get_settings
-from app.routes import calculate, entries, health, insights, whatif
+from app.routes import calculate, entries, gamification, health, insights, whatif
 
 # Directory holding the built frontend (populated by the Docker build).
 _STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
@@ -75,6 +75,7 @@ def create_app() -> FastAPI:
     app.include_router(calculate.router, prefix="/api")
     app.include_router(insights.router, prefix="/api")
     app.include_router(whatif.router, prefix="/api")
+    app.include_router(gamification.router, prefix="/api")
     app.include_router(entries.router, prefix="/api")
 
     _mount_spa(app)

@@ -15,26 +15,26 @@ from app.carbon.factors import CarFuel, DietType
 class TransportInput(BaseModel):
     """Weekly travel habits plus yearly flight counts."""
 
-    car_km_per_week: float = Field(0, ge=0)
+    car_km_per_week: float = Field(0, ge=0, le=5000)
     car_fuel: CarFuel = CarFuel.PETROL
-    public_transit_km_per_week: float = Field(0, ge=0)
-    short_haul_flights_per_year: int = Field(0, ge=0)
-    long_haul_flights_per_year: int = Field(0, ge=0)
+    public_transit_km_per_week: float = Field(0, ge=0, le=5000)
+    short_haul_flights_per_year: int = Field(0, ge=0, le=200)
+    long_haul_flights_per_year: int = Field(0, ge=0, le=100)
 
 
 class HomeInput(BaseModel):
     """Monthly household energy use, shared across the household size."""
 
-    electricity_kwh_per_month: float = Field(0, ge=0)
-    natural_gas_kwh_per_month: float = Field(0, ge=0)
-    household_size: int = Field(1, ge=1)
+    electricity_kwh_per_month: float = Field(0, ge=0, le=50000)
+    natural_gas_kwh_per_month: float = Field(0, ge=0, le=50000)
+    household_size: int = Field(1, ge=1, le=20)
 
 
 class ConsumptionInput(BaseModel):
     """Consumer goods spending and landfill waste."""
 
-    goods_spend_usd_per_month: float = Field(0, ge=0)
-    waste_kg_per_week: float = Field(0, ge=0)
+    goods_spend_usd_per_month: float = Field(0, ge=0, le=100000)
+    waste_kg_per_week: float = Field(0, ge=0, le=1000)
 
 
 class CarbonInput(BaseModel):
@@ -164,3 +164,43 @@ class WhatIfResult(BaseModel):
     delta_kg: float
     delta_pct: float
     saves: bool
+
+
+# ── Gamification ──────────────────────────────────────────────────────
+
+
+class EcoChallenge(BaseModel):
+    """A personalized eco-challenge targeting the user's biggest emission sources.
+
+    Every challenge is dynamically generated from the user's actual footprint
+    data — zero hardcoded challenges.
+    """
+
+    id: str
+    title: str
+    description: str
+    category: str          # "transport" | "home" | "diet" | "consumption"
+    duration_days: int     # 7, 14, or 30
+    estimated_savings_kg: float
+    difficulty: str        # "easy" | "medium" | "hard"
+    icon: str              # emoji
+
+
+class Achievement(BaseModel):
+    """A milestone badge earned through footprint analysis and behaviour.
+
+    Unlocked status is computed from the user's actual data — never static.
+    """
+
+    id: str
+    title: str
+    description: str
+    icon: str
+    unlocked: bool
+
+
+class ChallengesResponse(BaseModel):
+    """Personalized eco-challenges and achievements for gamified engagement."""
+
+    challenges: list[EcoChallenge]
+    achievements: list[Achievement]

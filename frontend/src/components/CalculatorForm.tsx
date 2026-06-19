@@ -76,6 +76,8 @@ export function CalculatorForm({ onSubmit, loading }: Props) {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
               {FUEL_OPTIONS.map(o => (
                 <button key={o.value} type="button"
+                  aria-label={`Select ${o.label} fuel type`}
+                  aria-pressed={input.transport.car_fuel === o.value}
                   className={`pill${input.transport.car_fuel === o.value ? " active-green" : ""}`}
                   onClick={() => pt({ car_fuel: o.value })}
                   style={{ fontSize: 11, padding: "6px 8px" }}>
@@ -129,6 +131,8 @@ export function CalculatorForm({ onSubmit, loading }: Props) {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6 }}>
             {DIET_OPTIONS.map(o => (
               <button key={o.value} type="button"
+                aria-label={`Select ${o.label} diet`}
+                aria-pressed={input.diet === o.value}
                 className={`pill${input.diet === o.value ? " active-amber" : ""}`}
                 onClick={() => setInput(s => ({ ...s, diet: o.value }))}
                 style={{ flexDirection: "column", gap: 3, padding: "8px 4px", fontSize: 10, lineHeight: 1.3 }}>

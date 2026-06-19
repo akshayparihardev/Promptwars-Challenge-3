@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.config import Settings, get_settings
 from app.insights.gemini import generate_insights
@@ -16,11 +18,13 @@ class InsightsPayload(CarbonInput):
 
 
 router = APIRouter()
+limiter = Limiter(key_func=get_remote_address)
 
 
 @router.post("/insights", response_model=InsightsResponse, tags=["Insights"])
+@limiter.limit("20/minute")
 async def get_insights(
-    payload: InsightsPayload, settings: Settings = Depends(get_settings)
+    request: Request, payload: InsightsPayload, settings: Settings = Depends(get_settings)
 ) -> InsightsResponse:
     """Generate personalized reduction advice based on a footprint result."""
     # We pass the unpacked payload to the insight engine.

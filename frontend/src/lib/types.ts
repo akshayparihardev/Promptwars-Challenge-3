@@ -80,6 +80,30 @@ export interface InsightsResponse {
   source: "gemini" | "rules";
 }
 
+export interface EcoChallenge {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  duration_days: number;
+  estimated_savings_kg: number;
+  difficulty: "easy" | "medium" | "hard";
+  icon: string;
+}
+
+export interface Achievement {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  unlocked: boolean;
+}
+
+export interface ChallengesResponse {
+  challenges: EcoChallenge[];
+  achievements: Achievement[];
+}
+
 export interface WhatIfOverride {
   location?: string | null;
   transport?: Partial<CarbonInput["transport"]> | null;
