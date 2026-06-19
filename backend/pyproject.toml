@@ -9,6 +9,7 @@ minversion = "8.0"
 addopts = "--cov=app --cov-report=term-missing --cov-fail-under=90 -v"
 testpaths = ["tests"]
 asyncio_mode = "auto"
+pythonpath = ["."]
 
 [tool.mypy]
 strict = false
