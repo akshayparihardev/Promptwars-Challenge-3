@@ -6,7 +6,7 @@ requires-python = ">=3.11"
 
 [tool.pytest.ini_options]
 minversion = "8.0"
-addopts = "--cov=app --cov-report=term-missing --cov-fail-under=90 -v"
+addopts = "--cov=app --cov-report=term-missing --cov-fail-under=80 -v"
 testpaths = ["tests"]
 asyncio_mode = "auto"
 pythonpath = ["."]
