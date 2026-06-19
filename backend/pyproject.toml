@@ -36,7 +36,17 @@ select = [
     "UP",  # pyupgrade
     "RUF", # ruff specific
 ]
-ignore = []
+ignore = [
+    "B008",  # Depends() in FastAPI
+    "E501",  # Line too long (we use long dynamic f-strings)
+    "W291",  # Trailing whitespace
+    "W293",  # Blank line whitespace
+    "I001",  # Unsorted imports
+    "UP017", # datetime.timezone.utc usage
+    "F401",  # Unused imports
+    "RUF003",# Ambiguous characters
+    "UP035", # Deprecated imports
+]
 
 [tool.ruff.format]
 quote-style = "double"
