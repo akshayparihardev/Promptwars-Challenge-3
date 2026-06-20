@@ -51,9 +51,9 @@ export function CalculatorForm({ onSubmit, loading }: Props) {
         <div className="section-label">Transport</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
           <NumberField label="Car km / week" suffix="km" value={input.transport.car_km_per_week}
-            onChange={v => pt({ car_km_per_week: Math.max(0, v) })} />
+            onChange={v => pt({ car_km_per_week: Math.max(0, Math.min(5000, v)) })} />
           <NumberField label="Transit km / week" suffix="km" value={input.transport.public_transit_km_per_week}
-            onChange={v => pt({ public_transit_km_per_week: Math.max(0, v) })} />
+            onChange={v => pt({ public_transit_km_per_week: Math.max(0, Math.min(5000, v)) })} />
         </div>
 
         <div style={{ marginBottom: 12 }}>
@@ -73,9 +73,9 @@ export function CalculatorForm({ onSubmit, loading }: Props) {
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
           <NumberField label="Short flights / yr" value={input.transport.short_haul_flights_per_year}
-            onChange={v => pt({ short_haul_flights_per_year: Math.max(0, Math.floor(v)) })} />
+            onChange={v => pt({ short_haul_flights_per_year: Math.max(0, Math.min(200, Math.floor(v))) })} />
           <NumberField label="Long flights / yr" value={input.transport.long_haul_flights_per_year}
-            onChange={v => pt({ long_haul_flights_per_year: Math.max(0, Math.floor(v)) })} />
+            onChange={v => pt({ long_haul_flights_per_year: Math.max(0, Math.min(100, Math.floor(v))) })} />
         </div>
       </div>
 
@@ -84,11 +84,11 @@ export function CalculatorForm({ onSubmit, loading }: Props) {
         <div className="section-label">Home Energy</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <NumberField label="Electricity / month" suffix="kWh" value={input.home.electricity_kwh_per_month}
-            onChange={v => ph({ electricity_kwh_per_month: Math.max(0, v) })} />
+            onChange={v => ph({ electricity_kwh_per_month: Math.max(0, Math.min(50000, v)) })} />
           <NumberField label="Natural gas / month" suffix="kWh" value={input.home.natural_gas_kwh_per_month}
-            onChange={v => ph({ natural_gas_kwh_per_month: Math.max(0, v) })} />
+            onChange={v => ph({ natural_gas_kwh_per_month: Math.max(0, Math.min(50000, v)) })} />
           <NumberField label="Household size" min={1} value={input.home.household_size}
-            onChange={v => ph({ household_size: Math.max(1, Math.floor(v)) })}
+            onChange={v => ph({ household_size: Math.max(1, Math.min(20, Math.floor(v))) })}
             hint="Energy is divided equally" />
         </div>
       </div>
@@ -116,9 +116,9 @@ export function CalculatorForm({ onSubmit, loading }: Props) {
         <div className="section-label">Goods & Waste</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
           <NumberField label="Goods spend / month" suffix="USD" value={input.consumption.goods_spend_usd_per_month}
-            onChange={v => pc({ goods_spend_usd_per_month: Math.max(0, v) })} />
+            onChange={v => pc({ goods_spend_usd_per_month: Math.max(0, Math.min(100000, v)) })} />
           <NumberField label="Landfill waste / week" suffix="kg" value={input.consumption.waste_kg_per_week}
-            onChange={v => pc({ waste_kg_per_week: Math.max(0, v) })} />
+            onChange={v => pc({ waste_kg_per_week: Math.max(0, Math.min(1000, v)) })} />
         </div>
       </div>
 
