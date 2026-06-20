@@ -31,20 +31,21 @@ logger = logging.getLogger(__name__)
 _SYSTEM_INSTRUCTION = (
     "You are an expert carbon footprint analyst for South Asian and global contexts.\n"
     "Generate hyper-personalized reduction advice. Rules:\n"
-    "- Address the user's LARGEST emission category first "
-    "(it is marked ← LARGEST in the data below)\n"
+    "- Address the user's LARGEST emission category first\n"
     "- For India users: reference Indian Railways, metro, local diet "
     "(dal, rajma, paneer alternatives), PM-KUSUM solar scheme\n"
-    "- Every saving_kg_co2 MUST be derived arithmetically from the user's "
-    "actual numbers (show your reasoning in the action text)\n"
-    "- Use the regional benchmark provided, not a generic global figure\n"
+    "- DO NOT compute any carbon numbers yourself. You will be provided with "
+    "pre-computed, exact mathematical recommendations. You MUST select 3 of these "
+    "recommendations and rewrite their 'action' text to be highly motivational and "
+    "personalized, but you MUST keep the exact 'category', 'saving_kg_co2', and "
+    "'difficulty' numbers provided to you.\n"
     "- Tone: data-driven, specific, encouraging\n"
     "- Return ONLY this exact JSON, no markdown:\n"
     '{"summary": "<2 sentences mentioning total_kg and largest_category>",'
     '"comparison": "<1 sentence vs regional benchmark AND global 4.8t>",'
     '"recommendations": [{"action": "<specific, references user actual numbers>",'
     '"category": "<transport|diet|home|consumption>",'
-    '"saving_kg_co2": <number>,'
+    '"saving_kg_co2": <integer>,'
     '"difficulty": "<easy|medium|hard>"}]}\n'
     "Exactly 3 recommendations, ordered by saving_kg_co2 descending."
 )
@@ -61,7 +62,7 @@ _RESPONSE_SCHEMA = {
                 "properties": {
                     "category": {"type": "string"},
                     "action": {"type": "string"},
-                    "saving_kg_co2": {"type": "number"},
+                    "saving_kg_co2": {"type": "integer"},
                     "difficulty": {"type": "string"},
                 },
                 "required": ["category", "action", "saving_kg_co2"],
@@ -106,7 +107,12 @@ def _build_prompt(data: CarbonInput, result: FootprintResult) -> str:
         f"Diet: {data.diet.value}\n"
         f"Energy: {data.home.electricity_kwh_per_month} kWh/month electricity, "
         f"{data.home.natural_gas_kwh_per_month} kWh/month gas\n"
-        f"Household: {data.home.household_size} people"
+        f"Household: {data.home.household_size} people\n\n"
+        f"PRE-COMPUTED RECOMMENDATIONS (You MUST use these exact categories and saving_kg_co2 values, but rewrite the action text to be more personal):\n"
+        + "\n".join(
+            f"- Category: {r.category}, Saving: {int(r.estimated_annual_savings_kg)} kg, Difficulty: {r.difficulty}, Base Action: {r.action}"
+            for r in generate_rule_based_insights(data, result).recommendations
+        )
     )
 
 
@@ -140,7 +146,7 @@ def _call_gemini(
         Recommendation(
             category=str(r["category"]),
             action=str(r["action"]),
-            estimated_annual_savings_kg=round(float(r.get("saving_kg_co2", 0)), 2),
+            estimated_annual_savings_kg=float(r.get("saving_kg_co2", 0)),
             difficulty=str(r.get("difficulty", "medium")),
         )
         for r in payload.get("recommendations", [])

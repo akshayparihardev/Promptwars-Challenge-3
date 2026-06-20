@@ -60,56 +60,61 @@ _DEVELOPED_MAP: dict[str, str] = {
 
 @lru_cache(maxsize=128)
 def resolve_location_context(location: str) -> LocationContext:
-    """Lightweight location classification using curated regional keywords.
-
-    Returns LocationContext with all region-specific values computed.
-    lru_cache ensures repeated lookups for the same location are free.
-    """
-    loc = location.lower().strip()
-
-    is_india = any(k in loc for k in _INDIA_KEYWORDS)
-    is_rural = any(k in loc for k in _RURAL_KEYWORDS)
-    matched_developed = next(
-        (v for k, v in _DEVELOPED_MAP.items() if k in loc), None
+    loc = location.lower()
+    india_keywords = {
+        "india", "mumbai", "delhi", "bangalore", "bengaluru",
+        "chennai", "hyderabad", "pune", "kolkata", "ahmedabad",
+        "jaipur", "surat", "lucknow", "kanpur", "nagpur",
+        "indore", "bhopal", "visakhapatnam", "patna"
+    }
+    rural_keywords = {"village", "rural", "town", "tehsil", "gram"}
+    developed_map = {
+        "usa": "us", "united states": "us", "america": "us",
+        "uk": "uk", "united kingdom": "uk", "england": "uk",
+        "germany": "eu", "france": "eu", "italy": "eu",
+        "canada": "us", "australia": "us", "japan": "us",
+        "singapore": "us", "norway": "uk", "sweden": "uk",
+        "netherlands": "eu", "spain": "eu"
+    }
+    is_india = any(k in loc for k in india_keywords)
+    is_rural = any(k in loc for k in rural_keywords)
+    matched = next(
+        (v for k, v in developed_map.items() if k in loc), None
     )
-
     if is_india:
         region = "india_rural" if is_rural else "india_urban"
-        grid_factor = factors.GRID_FACTORS["india"]
-        benchmark_t = factors.REGIONAL_BENCHMARKS_T["india"]
-        benchmark_label = "India average"
-        local_transport_tip = "Indian Railways or metro"
-        currency_symbol = "₹"
-    elif matched_developed:
+        return LocationContext(
+            region=region,
+            grid_factor=factors.GRID_FACTORS["india"],
+            annual_km=factors.ANNUAL_KM[region],
+            benchmark_t=factors.REGIONAL_BENCHMARKS_T["india"],
+            benchmark_label="India average",
+            local_transport_tip="Indian Railways or metro",
+            currency_symbol="₹",
+        )
+    elif matched:
         region = "developed"
-        grid_factor = factors.GRID_FACTORS.get(
-            matched_developed, factors.GRID_FACTORS["default"]
+        return LocationContext(
+            region=region,
+            grid_factor=factors.GRID_FACTORS.get(matched, factors.GRID_FACTORS["default"]),
+            annual_km=factors.ANNUAL_KM["developed"],
+            benchmark_t=factors.REGIONAL_BENCHMARKS_T.get(
+                matched, factors.REGIONAL_BENCHMARKS_T["global"]
+            ),
+            benchmark_label="global average",
+            local_transport_tip="public transit",
+            currency_symbol="$",
         )
-        benchmark_t = factors.REGIONAL_BENCHMARKS_T.get(
-            matched_developed, factors.REGIONAL_BENCHMARKS_T["global"]
-        )
-        benchmark_label = f"{matched_developed.upper()} average" if matched_developed != "us" else "US average"
-        local_transport_tip = "public transit"
-        currency_symbol = "$" if matched_developed == "us" else "€" if matched_developed == "eu" else "£" if matched_developed == "uk" else "$"
     else:
-        region = "developing"
-        grid_factor = factors.GRID_FACTORS["default"]
-        benchmark_t = factors.REGIONAL_BENCHMARKS_T["global"]
-        benchmark_label = "global average"
-        local_transport_tip = "public transit"
-        currency_symbol = "$"
-
-    annual_km = factors.ANNUAL_KM.get(region, factors.ANNUAL_KM["developing"])
-
-    return LocationContext(
-        region=region,
-        grid_factor=grid_factor,
-        annual_km=annual_km,
-        benchmark_t=benchmark_t,
-        benchmark_label=benchmark_label,
-        local_transport_tip=local_transport_tip,
-        currency_symbol=currency_symbol,
-    )
+        return LocationContext(
+            region="developing",
+            grid_factor=factors.GRID_FACTORS["default"],
+            annual_km=factors.ANNUAL_KM["developing"],
+            benchmark_t=factors.REGIONAL_BENCHMARKS_T["global"],
+            benchmark_label="global average",
+            local_transport_tip="public transit",
+            currency_symbol="$",
+        )
 
 
 # ────────────────────── Calculation functions ───────────────────────

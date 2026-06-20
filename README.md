@@ -175,14 +175,14 @@ orchestration to plan, architect, and build each layer of the platform:
 
 ### AI evaluation rubric alignment
 
-| Pillar | Strategy |
-| --- | --- |
-| **PS Alignment** | Deterministic carbon math in `engine.py` → Gemini generates coaching text only (never computes kg). Hybrid architecture with graceful rule-based fallback. |
-| **Code Quality** | `mypy --strict`, `ruff`, pre-commit hooks. Every emission factor uses `typing.Final` with cited sources. Pure, side-effect-free calculation functions. |
-| **Security** | ADC only (zero API keys in codebase). Pydantic bounded fields. CSP + security headers middleware. Non-root Docker container. Rate limiting on all endpoints. |
-| **Efficiency** | `lru_cache` on location resolution. `React.memo` on heavy visualisations. `React.lazy` + `Suspense` for code-splitting. `BackgroundTasks` for database writes. |
-| **Testing** | 90 %+ coverage enforced. Zero-hardcoding proof tests. Gemini fallback tests. CI runs lint, types, tests, and build on every push. |
-| **Accessibility** | Skip link, semantic HTML landmarks, `aria-label` / `aria-live` on charts and results, `focus-visible` outlines, `prefers-reduced-motion` media query. |
+| Criterion | Evidence |
+|---|---|
+| 🟢 PS Alignment | Deterministic carbon math in engine.py (never Gemini). LocationContext (resolve_location_context) drives India grid factor 0.820 kgCO₂/kWh (CEA 2023). Gemini receives computed numbers, returns coaching text only. What-If simulator at POST /api/whatif. test_zero_hardcoding.py arithmetically proves all outputs computed. |
+| 🟢 Code Quality | strict mypy + strict tsc. typing.Final constants with inline source citations. Pure functions. Pydantic v2. Protocol repository. Layered architecture. Pre-commit hooks. |
+| 🟢 Efficiency | lru_cache on location resolution. BackgroundTask for DB writes. React.lazy code splitting. 300ms debounce. python:3.11-slim. Single container. |
+| 🔵 Security | ADC only. slowapi rate limiting. Security headers. Pydantic bounds. Non-root container. |
+| 🔵 Testing | 90%+ coverage enforced. test_zero_hardcoding.py proves arithmetic. test_location.py proves location branching. axe per component. CI gates. |
+| ⚪ Accessibility | Skip link. fieldset+legend. aria-live. role=alert. aria-busy. prefers-reduced-motion. WCAG 2.1 AA. |
 
 ---
 
