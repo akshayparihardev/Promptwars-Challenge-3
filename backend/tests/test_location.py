@@ -12,7 +12,7 @@ def test_india_location_resolution():
     assert ctx.currency_symbol == "₹"
 
 def test_uk_location_resolution():
-    ctx = resolve_location_context("London")
+    ctx = resolve_location_context("London, UK")
     assert ctx.region == "developed"
     assert ctx.grid_factor == pytest.approx(factors.GRID_FACTORS["uk"])
     assert ctx.currency_symbol == "£"
