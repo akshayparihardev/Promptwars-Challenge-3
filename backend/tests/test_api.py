@@ -66,21 +66,23 @@ async def test_insights_endpoint(client: httpx.AsyncClient):
                 "ratio_to_global_average": 1.04,
                 "ratio_to_sustainable_target": 2.5
             },
+            "insight_tag": "average",
+            "largest_category": "transport",
+            "location_context": {
+                "region": "india",
+                "grid_factor": 0.82,
+                "annual_km": 8000,
+                "benchmark_t": 1.9,
+                "benchmark_label": "India average",
+                "local_transport_tip": "Use metro",
+                "currency_symbol": "₹"
+            },
             "equivalencies": {
                 "trees_needed": 200,
                 "flights_delhi_mumbai": 50,
                 "km_petrol_car": 20000,
                 "km_indian_rail": 120000
-            },
-            "location_context": {
-                "grid_factor_kg_per_kwh": 0.82,
-                "annual_km_benchmark": 8000,
-                "benchmark_label": "India average",
-                "benchmark_t": 1.9,
-                "region": "asia-south1",
-                "local_transport_tip": "Use metro"
-            },
-            "largest_category": "transport"
+            }
         }
     }
     
@@ -123,21 +125,23 @@ async def test_entries_endpoint(client: httpx.AsyncClient):
                 "ratio_to_global_average": 1.04,
                 "ratio_to_sustainable_target": 2.5
             },
+            "insight_tag": "average",
+            "largest_category": "transport",
+            "location_context": {
+                "region": "india",
+                "grid_factor": 0.82,
+                "annual_km": 8000,
+                "benchmark_t": 1.9,
+                "benchmark_label": "India average",
+                "local_transport_tip": "Use metro",
+                "currency_symbol": "₹"
+            },
             "equivalencies": {
                 "trees_needed": 200,
                 "flights_delhi_mumbai": 50,
                 "km_petrol_car": 20000,
                 "km_indian_rail": 120000
-            },
-            "location_context": {
-                "grid_factor_kg_per_kwh": 0.82,
-                "annual_km_benchmark": 8000,
-                "benchmark_label": "India average",
-                "benchmark_t": 1.9,
-                "region": "asia-south1",
-                "local_transport_tip": "Use metro"
-            },
-            "largest_category": "transport"
+            }
         }
     }
     
