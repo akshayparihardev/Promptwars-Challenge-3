@@ -99,28 +99,36 @@ def _build_prompt(data: CarbonInput, result: FootprintResult) -> str:
 def _call_gemini(
     data: CarbonInput, result: FootprintResult, settings: Settings
 ) -> InsightsResponse:
-    """Invoke Gemini on Vertex AI and parse a structured response.
+    """Invoke Gemini via direct REST API call (no SDK dependency).
 
-    Imported lazily so the SDK/credentials are only required when actually used —
-    keeps unit tests and the rule-based path dependency-free.
+    Uses a simple HTTP POST to the Google Generative Language API.
+    This bypasses all google-genai SDK version issues.
     """
-    from google import genai
-    from google.genai import types
+    import httpx
 
-    # Initialize with API key instead of Vertex AI (no ADC required)
-    client = genai.Client(api_key=settings.gemini_api_key)
-    
-    response = client.models.generate_content(
-        model=settings.gemini_model,
-        contents=_build_prompt(data, result),
-        config=types.GenerateContentConfig(
-            system_instruction=_SYSTEM_INSTRUCTION,
-            response_mime_type="application/json",
-            temperature=0.4,
-            max_output_tokens=4096,
-        ),
+    url = (
+        f"https://generativelanguage.googleapis.com/v1beta/models/"
+        f"{settings.gemini_model}:generateContent"
     )
-    payload = json.loads(response.text)
+    headers = {"Content-Type": "application/json"}
+    params = {"key": settings.gemini_api_key}
+    body = {
+        "system_instruction": {"parts": [{"text": _SYSTEM_INSTRUCTION}]},
+        "contents": [{"parts": [{"text": _build_prompt(data, result)}]}],
+        "generationConfig": {
+            "responseMimeType": "application/json",
+            "temperature": 0.4,
+            "maxOutputTokens": 4096,
+        },
+    }
+
+    resp = httpx.post(url, json=body, headers=headers, params=params, timeout=30.0)
+    resp.raise_for_status()
+    api_result = resp.json()
+
+    # Extract the generated text from the response
+    text = api_result["candidates"][0]["content"]["parts"][0]["text"]
+    payload = json.loads(text)
     recommendations = [
         Recommendation(
             category=str(r["category"]),
@@ -152,6 +160,4 @@ def generate_insights(
         logger.warning(
             "Gemini insight generation failed, using rule-based fallback: %s", exc
         )
-        fallback = generate_rule_based_insights(data, result)
-        fallback.summary = f"[DEBUG] {str(exc)[:200]} | " + fallback.summary
-        return fallback
+        return generate_rule_based_insights(data, result)
