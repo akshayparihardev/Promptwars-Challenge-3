@@ -1,32 +1,26 @@
-# Dual Submission: Building a "Rank 1" Carbon Footprint Awareness Platform
+# Dual Submission: LinkedIn Build-in-Public Post
 
-**Format**: LinkedIn Post / Technical Blog Post for the "Build-in-Public" Journey.
+*Copy and paste this directly to LinkedIn. It's written to sound authentic, technical, and engaging for other engineers, avoiding typical "AI buzzwords."*
 
 ---
 
-Hey network! 👋 I'm excited to share the culmination of my journey building the **Carbon Footprint Awareness Platform** for Google's PromptWars Challenge 3. 
+Just wrapped up my submission for Google's PromptWars Challenge 3: a hyper-local Carbon Footprint platform 🌍💻
 
-When I set out to build this, my goal wasn't just to throw an LLM at a problem. The core objective of this challenge demanded logical decision-making based on user context, bulletproof carbon tracking, and "Green Software Engineering" principles. 
+When building this, I noticed a trap a lot of AI apps fall into: trusting the LLM to do math. Instead of asking Gemini to compute carbon footprints (which almost guarantees hallucinations), I took a different approach 💡
 
-Here’s a deep dive into how I architected this application to aim for the absolute top rank:
+Here’s the architecture I used to aim for Rank 1:
 
-### 🧠 1. The Hybrid AI Architecture (Zero Hardcoding & Zero Hallucinations)
-The most critical design decision I made was splitting the application logic. LLMs are incredible at coaching, but they are notoriously bad at strict deterministic math. 
+1️⃣ **Pure Math Engine**: I built a strictly deterministic Python backend (`engine.py`) using Pydantic validation. The math runs exactly the same every time based on DEFRA and CEA emission factors. No hallucinations, period.
 
-Instead of asking Gemini to compute carbon savings (which introduces hallucination risks), I built a **pure, side-effect-free deterministic engine** (`engine.py`) using cited emission factors from DEFRA 2023, CEA 2023, and the EPA. The engine precisely calculates `delta_kg` down to the decimal. 
+2️⃣ **Contextual AI via Graceful Degradation**: Once the engine locks in the exact numbers, they are passed as strict context to Gemini 2.5 Flash on Vertex AI. Gemini’s *only* job is to consume those integers and generate personalized, coaching advice. If the Google Cloud API times out? The app silently falls back to a deterministic rules engine. 🛡️
 
-Once the exact numbers are locked in, they are passed as strict context to **Gemini 2.5 Flash on Vertex AI**. Gemini's *only* job is to consume those pre-computed integers and generate highly personalized, motivational coaching text. This completely eliminates mathematical hallucinations.
+3️⃣ **Hyper-Local Grids**: A kWh of electricity in Mumbai has a vastly different carbon impact than one in London. I implemented a caching layer that dynamically adjusts the underlying emission factors and regional benchmarks based purely on the user's location string.
 
-### 📍 2. Hyper-Local Context Resolution
-Carbon footprints are inherently geographic. A kWh of electricity in India (0.820 kg/kWh) has a vastly different impact than one in the UK (0.233 kg/kWh). 
-I implemented a `resolve_location_context` caching layer that dynamically adjusts the underlying emission factors, grid benchmarks, and even local transport tips (e.g., suggesting *Indian Railways* vs *Public Transit*) based purely on the user's string location. 
+4️⃣ **Premium Restraint UI**: Stripped out the glowing "AI" UI elements in favor of a minimalist, accessible `zinc` color palette with the Geist font. It feels like a premium SaaS tool, not a hackathon demo. 
 
-### 🔐 3. Enterprise-Grade Security
-Security isn't an afterthought. I deployed this app using **Application Default Credentials (ADC)**. If you audit the entire repository, you will find exactly **zero** API keys or secrets exposed. The frontend and backend are served securely via a single multi-stage, non-root Docker container on **Google Cloud Run**, protected by strict `slowapi` rate-limiting and robust Pydantic v2 bounding.
+Really proud of how this turned out. You can check out the live deployment on Render, and I've open-sourced the entire repository (FastAPI + React 18) below 👇
 
-### ⚡ 4. Green Software Engineering & Accessibility
-Every component matters. From a 300ms debounce on the What-If Simulator to `React.memo` for preventing unnecessary re-renders, the app is highly optimized. More importantly, it meets **WCAG 2.1 AA** accessibility standards, featuring a dedicated `.skip-link`, `aria-labels` on all interactive charts (powered by Recharts), and a `prefers-reduced-motion` media query to respect user preferences.
+🔗 Live App: https://carbon-platform-bddp.onrender.com
+💻 GitHub Repo: https://github.com/akshayparihardev/Promptwars-Challenge-3
 
-It was an incredible experience stitching together FastAPI, React 18, Firestore, and Vertex AI. Check out the open-source repository below and try out the live deployment on Cloud Run! 🌍💚
-
-#GoogleCloud #PromptWars #Gemini #VertexAI #FastAPI #React #GreenTech #BuildInPublic #SoftwareEngineering
+#GoogleCloud #PromptWars #SoftwareEngineering #FastAPI #React #BuildInPublic #VertexAI
