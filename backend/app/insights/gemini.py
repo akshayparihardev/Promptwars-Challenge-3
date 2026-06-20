@@ -152,4 +152,6 @@ def generate_insights(
         logger.warning(
             "Gemini insight generation failed, using rule-based fallback: %s", exc
         )
-        return generate_rule_based_insights(data, result)
+        fallback = generate_rule_based_insights(data, result)
+        fallback.summary = f"[DEBUG] {str(exc)[:200]} | " + fallback.summary
+        return fallback
