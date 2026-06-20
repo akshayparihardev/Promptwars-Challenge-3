@@ -9,6 +9,8 @@
 > **understand, track, and reduce** their personal carbon footprint through
 > simple inputs, **localized context**, and **personalized, AI-generated insights**.
 
+- **[Dual Submission Narrative (Build-in-Public)](DUAL_SUBMISSION.md)**
+
 Built as a single, accessible web application: a **Python / FastAPI** backend and
 a **React + TypeScript** frontend, using **Google Gemini (Vertex AI)** for
 personalized advice and **Firestore** for tracking, deployed to **Google Cloud
