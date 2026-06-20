@@ -28,7 +28,8 @@ async def get_insights(
     request: Request, payload: InsightsPayload, settings: Settings = Depends(get_settings)
 ) -> InsightsResponse:
     """Generate personalized reduction advice based on a footprint result."""
-    ip = request.client.host if request.client else "unknown"
+    forwarded = request.headers.get("X-Forwarded-For")
+    ip = forwarded.split(",")[0].strip() if forwarded else (request.client.host if request.client else "unknown")
     
     use_ai = True
     if ai_usage_tracker[ip] >= 2:
