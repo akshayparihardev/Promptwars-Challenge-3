@@ -27,15 +27,26 @@ def test_build_prompt_logic():
     assert "Location: India" in prompt
     assert "Region: india" in prompt
 
-@patch("google.genai.Client")
-def test_gemini_success_mocked(mock_client):
-    settings = Settings(use_gemini=True, project_id="test")
+class MockResponse:
+    def __init__(self, json_data, status_code=200):
+        self.json_data = json_data
+        self.status_code = status_code
+
+    def json(self):
+        return self.json_data
+
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            raise Exception("HTTP Error")
+
+@patch("httpx.post")
+def test_gemini_success_mocked(mock_post):
+    settings = Settings(use_gemini=True, project_id="test", gemini_api_key="test_key")
     data = CarbonInput()
     result = calculate_footprint(data)
     
-    # Mock the JSON response
-    mock_response = mock_client.return_value.models.generate_content.return_value
-    mock_response.text = json.dumps({
+    # Mock the REST API JSON response structure
+    payload = {
         "summary": "You are doing well.",
         "comparison": "Better than average.",
         "recommendations": [
@@ -46,6 +57,9 @@ def test_gemini_success_mocked(mock_client):
                 "difficulty": "easy"
             }
         ]
+    }
+    mock_post.return_value = MockResponse({
+        "candidates": [{"content": {"parts": [{"text": json.dumps(payload)}]}}]
     })
     
     insights = generate_insights(data, result, settings)
@@ -53,14 +67,14 @@ def test_gemini_success_mocked(mock_client):
     assert len(insights.recommendations) == 1
     assert insights.recommendations[0].estimated_annual_savings_kg == 500
 
-@patch("google.genai.Client")
-def test_gemini_fallback_on_error(mock_client):
-    settings = Settings(use_gemini=True, project_id="test")
+@patch("httpx.post")
+def test_gemini_fallback_on_error(mock_post):
+    settings = Settings(use_gemini=True, project_id="test", gemini_api_key="test_key")
     data = CarbonInput()
     result = calculate_footprint(data)
     
     # Simulate API failure
-    mock_client.return_value.models.generate_content.side_effect = Exception("API Error")
+    mock_post.side_effect = Exception("HTTP Timeout")
     
     insights = generate_insights(data, result, settings)
     assert insights.source == "rules"  # Gracefully falls back
