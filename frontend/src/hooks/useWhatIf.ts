@@ -13,8 +13,8 @@ export function useWhatIf() {
     try {
       const res = await simulateWhatIf(baseInput, override);
       setResult(res);
-    } catch (err: any) {
-      setError(err.message || "An error occurred during simulation");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred during simulation");
     } finally {
       setLoading(false);
     }

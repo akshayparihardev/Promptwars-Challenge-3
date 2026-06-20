@@ -45,11 +45,11 @@ export function useFootprint() {
         saveEntry(getDeviceId(), input, res).catch((err) =>
           console.error("Failed to save history", err)
         );
-      } catch (e) {
+      } catch {
         // Ignore history save errors
       }
-    } catch (err: any) {
-      setError(err.message || "An error occurred");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }

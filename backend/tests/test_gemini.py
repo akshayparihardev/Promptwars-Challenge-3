@@ -78,3 +78,26 @@ def test_gemini_fallback_on_error(mock_post):
     
     insights = generate_insights(data, result, settings)
     assert insights.source == "rules"  # Gracefully falls back
+
+@patch("httpx.post")
+def test_gemini_fallback_on_empty_recommendations(mock_post):
+    settings = Settings(use_gemini=True, project_id="test", gemini_api_key="test_key")
+    data = CarbonInput()
+    result = calculate_footprint(data)
+    
+    payload = {"summary": "Hi", "comparison": "Hi", "recommendations": []}
+    mock_post.return_value = MockResponse({
+        "candidates": [{"content": {"parts": [{"text": json.dumps(payload)}]}}]
+    })
+    
+    insights = generate_insights(data, result, settings)
+    assert insights.source == "rules"
+
+def test_gemini_use_ai_flag():
+    settings = Settings(use_gemini=True, project_id="test", gemini_api_key="test_key")
+    data = CarbonInput()
+    result = calculate_footprint(data)
+    
+    insights = generate_insights(data, result, settings, use_ai=False)
+    assert insights.source == "rules"
+

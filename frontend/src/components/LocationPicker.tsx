@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { MapPin, ChevronDown, CheckCircle2 } from "lucide-react";
 
 // All supported locations grouped by region — no hardcoded defaults, purely data
+// eslint-disable-next-line react-refresh/only-export-components
 export const LOCATION_GROUPS: { region: string; color: string; icon: string; cities: string[] }[] = [
   {
     region: "India – Urban",
@@ -128,6 +129,7 @@ export function LocationPicker({ value, onChange }: Props) {
         />
         <button
           type="button"
+          aria-label="Toggle location dropdown"
           onClick={() => setOpen(o => !o)}
           className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
         >

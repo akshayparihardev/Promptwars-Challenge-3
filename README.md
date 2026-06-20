@@ -110,7 +110,7 @@ To ensure absolute reliability, the CI pipeline enforces strict static analysis 
 
 ## 6. Security Posture & Assumptions
 
-- **Identity Management:** The application relies entirely on Google Application Default Credentials (ADC). There are no hardcoded API keys, tokens, or service accounts within the source repository.
+- **Identity Management:** The application securely injects API credentials via environment variables (`GEMINI_API_KEY`). There are no hardcoded API keys, tokens, or service accounts within the source repository.
 - **Data Privacy:** User instances are tracked utilizing a randomized, anonymized device identifier stored locally in `localStorage`. 
 - **Graceful Fault Tolerance:** Should Vertex AI encounter throttling or unavailability, the system falls back seamlessly to a secondary rule-based engine, guaranteeing uninterrupted service to the user.
 - **API Guardrails:** All incoming payloads are strictly validated using `Pydantic v2` numerical bounds, and traffic is rate-limited via `slowapi` to prevent abusive execution loads.
