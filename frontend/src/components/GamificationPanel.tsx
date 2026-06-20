@@ -19,7 +19,7 @@ function GamificationPanelInner({ data }: { data: ChallengesResponse }) {
           <Trophy className="w-4 h-4 text-amber-500 dark:text-amber-400" />
           <h3 className="font-semibold text-sm text-zinc-900 dark:text-zinc-200">Achievements</h3>
         </div>
-        <div className="grid grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           {data.achievements.map((ach) => (
             <div
               key={ach.id}

@@ -90,15 +90,10 @@ function App() {
       </header>
 
       {/* ── Split layout ── */}
-      <main id="main-content" role="main" style={{ flex: 1, display: "grid", gridTemplateColumns: "460px 1fr", maxHeight: "calc(100vh - 52px)" }}>
+      <main id="main-content" role="main" className="flex-1 flex flex-col md:grid md:grid-cols-[380px_1fr] lg:grid-cols-[460px_1fr] md:overflow-hidden md:h-[calc(100vh-52px)]">
 
         {/* LEFT — Form panel */}
-        <div style={{
-          borderRight: "1px solid var(--border)",
-          overflowY: "auto",
-          padding: "28px 24px",
-          background: "var(--bg-1)",
-        }}>
+        <div className="border-b md:border-b-0 md:border-r border-zinc-200 dark:border-zinc-800 p-6 lg:p-7 bg-[var(--bg-1)] md:overflow-y-auto">
           {/* Form header */}
           <div style={{ marginBottom: 24 }}>
             <h1 style={{
@@ -134,7 +129,7 @@ function App() {
         </div>
 
         {/* RIGHT — Results panel */}
-        <div aria-live="polite" aria-atomic="false" style={{ overflowY: "auto", padding: "28px 32px", background: "var(--bg)" }}>
+        <div aria-live="polite" aria-atomic="false" className="p-6 lg:p-8 bg-[var(--bg)] md:overflow-y-auto">
           <AnimatePresence mode="wait">
 
             {/* Empty state — clean, no spinning orbs */}
@@ -191,7 +186,7 @@ function App() {
                 </div>
 
                 {/* What-If + Card */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                   <WhatIfSimulator baseInput={currentInput} />
                   <CarbonCard result={result} />
                 </div>

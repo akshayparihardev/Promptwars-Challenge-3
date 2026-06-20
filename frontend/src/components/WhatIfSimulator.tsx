@@ -46,7 +46,7 @@ export function WhatIfSimulator({ baseInput }: { baseInput: CarbonInput }) {
       <div className="flex flex-col gap-3.5 mb-4">
         <div>
           <label className="label">Switch diet to</label>
-          <div className="grid grid-cols-3 gap-1">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
             <button
               type="button"
               onClick={() => setDietOverride("")}
@@ -71,11 +71,11 @@ export function WhatIfSimulator({ baseInput }: { baseInput: CarbonInput }) {
 
         <div>
           <label className="label">Switch fuel to</label>
-          <div className="grid grid-cols-5 gap-1">
+          <div className="flex flex-wrap md:grid md:grid-cols-5 gap-1">
             <button
               type="button"
               onClick={() => setFuelOverride("")}
-              className={`py-1.5 rounded-md border text-xs transition-all ${fuelOverride === "" ? "border-cyan-500/40 bg-cyan-500/10 dark:bg-cyan-500/8 text-cyan-600 dark:text-cyan-300" : "border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-500 hover:border-zinc-300 dark:hover:border-zinc-700"}`}
+              className={`flex-1 min-w-[70px] py-1.5 rounded-md border text-xs transition-all ${fuelOverride === "" ? "border-cyan-500/40 bg-cyan-500/10 dark:bg-cyan-500/8 text-cyan-600 dark:text-cyan-300" : "border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-500 hover:border-zinc-300 dark:hover:border-zinc-700"}`}
             >
               Same
             </button>
@@ -84,7 +84,7 @@ export function WhatIfSimulator({ baseInput }: { baseInput: CarbonInput }) {
                 key={o.value}
                 type="button"
                 onClick={() => setFuelOverride(o.value)}
-                className={`py-1.5 rounded-md border text-xs transition-all ${
+                className={`flex-1 min-w-[70px] py-1.5 rounded-md border text-xs transition-all ${
                   fuelOverride === o.value ? "border-cyan-500/40 bg-cyan-500/10 dark:bg-cyan-500/8 text-cyan-600 dark:text-cyan-300" : "border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-500 hover:border-zinc-300 dark:hover:border-zinc-700"
                 }`}
               >

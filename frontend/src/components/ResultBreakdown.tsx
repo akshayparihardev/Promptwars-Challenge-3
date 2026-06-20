@@ -77,10 +77,10 @@ function ResultBreakdownInner({ result }: { result: FootprintResult }) {
       </div>
 
       {/* ── Category breakdown + Pie ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 150px", gap: 20, alignItems: "start" }}>
+      <div className="flex flex-col md:grid md:grid-cols-[1fr_150px] gap-5 items-start">
 
         {/* Bars */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%" }}>
           <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: 0 }}>
             Breakdown
           </p>
@@ -106,7 +106,7 @@ function ResultBreakdownInner({ result }: { result: FootprintResult }) {
         </div>
 
         {/* Donut */}
-        <div style={{ height: 150 }} role="img" aria-label={`Pie chart showing carbon footprint breakdown across ${cats.length} categories`}>
+        <div style={{ height: 150, width: "100%" }} role="img" aria-label={`Pie chart showing carbon footprint breakdown across ${cats.length} categories`}>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie data={pieData} cx="50%" cy="50%" innerRadius={42} outerRadius={64}
@@ -149,7 +149,7 @@ function ResultBreakdownInner({ result }: { result: FootprintResult }) {
         <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: 12 }}>
           What this equals
         </p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {[
             { icon: <TreePine size={16} color="#4ade80" />, value: formatNumber(result.equivalencies.trees_needed), label: "Trees to offset" },
             { icon: <Plane    size={16} color="#22d3ee" />, value: formatNumber(result.equivalencies.flights_delhi_mumbai, 1), label: "Del–Mum flights" },
