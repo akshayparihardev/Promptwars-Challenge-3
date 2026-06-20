@@ -12,7 +12,7 @@ Here’s the architecture I used to aim for Rank 1:
 
 1️⃣ **Pure Math Engine**: I built a strictly deterministic Python backend (`engine.py`) using Pydantic validation. The math runs exactly the same every time based on DEFRA and CEA emission factors. No hallucinations, period.
 
-2️⃣ **Contextual AI via Graceful Degradation**: Once the engine locks in the exact numbers, they are passed as strict context to Gemini 1.5 Flash on Vertex AI. Gemini’s *only* job is to consume those integers and generate personalized, coaching advice. If the Google Cloud API times out? The app silently falls back to a deterministic rules engine. 🛡️
+2️⃣ **Contextual AI via Graceful Degradation**: Once the engine locks in the exact numbers, they are passed as strict context to Gemini 2.0 Flash Exp on Vertex AI. Gemini’s *only* job is to consume those integers and generate personalized, coaching advice. If the Google Cloud API times out? The app silently falls back to a deterministic rules engine. 🛡️
 
 3️⃣ **Hyper-Local Grids**: A kWh of electricity in Mumbai has a vastly different carbon impact than one in London. I implemented a caching layer that dynamically adjusts the underlying emission factors and regional benchmarks based purely on the user's location string.
 
