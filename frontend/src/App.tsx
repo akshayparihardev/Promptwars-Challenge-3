@@ -4,7 +4,7 @@ import { HistoryPanel } from './components/HistoryPanel'
 import { useFootprint } from './hooks/useFootprint'
 import { Entry, emptyInput, CarbonInput } from './lib/types'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Leaf, Moon, Sun } from 'lucide-react'
+import { Leaf, Moon, Sun, Sparkles } from 'lucide-react'
 
 // Lazy-load heavy visualisation components for code-splitting
 const ResultBreakdown = lazy(() => import('./components/ResultBreakdown').then(m => ({ default: m.ResultBreakdown })))
