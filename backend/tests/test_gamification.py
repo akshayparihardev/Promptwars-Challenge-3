@@ -54,7 +54,7 @@ def test_gamification_generation_light():
     result = calculate_footprint(data)
     response = generate_gamification(data, result)
     
-    assert achievements := {a.id: a for a in response.achievements}
+    achievements = {a.id: a for a in response.achievements}
     assert achievements["ach_1"].unlocked is True  # Below average
     assert achievements["ach_2"].unlocked is True  # Plant power
     assert achievements["ach_3"].unlocked is True  # Transit Hero
