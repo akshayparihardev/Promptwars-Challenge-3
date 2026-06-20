@@ -29,7 +29,7 @@ function CarbonCardInner({ result }: { result: FootprintResult }) {
   return (
     <div className="card">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="font-semibold text-sm text-zinc-300">Share your impact</h3>
+        <h3 className="font-semibold text-sm text-zinc-900 dark:text-zinc-300">Share your impact</h3>
         <button onClick={downloadCard} disabled={downloading} className="btn py-1.5 px-3 flex items-center gap-2 text-xs">
           <Download className="w-3.5 h-3.5" /> {downloading ? "Saving..." : "Download"}
         </button>

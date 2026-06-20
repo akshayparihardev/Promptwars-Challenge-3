@@ -44,7 +44,7 @@ function InsightsPanelInner({ insights }: { insights: InsightsResponse }) {
               initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.06 }}
-              className="rounded-lg p-3.5 border border-zinc-800 bg-zinc-900/60 flex gap-3"
+              className="rounded-lg p-3.5 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/60 flex gap-3"
             >
               <div className="flex-shrink-0 w-7 h-7 rounded-md flex items-center justify-center" style={{ background: diff.bg }}>
                 <TrendingDown className="w-3.5 h-3.5" style={{ color: diff.color }} />
@@ -54,10 +54,10 @@ function InsightsPanelInner({ insights }: { insights: InsightsResponse }) {
                   <span className="text-xs font-medium uppercase tracking-wide text-zinc-500">{rec.category}</span>
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-medium" style={{ color: diff.color }}>{diff.label}</span>
-                    <span className="text-xs text-emerald-400 font-medium">↓ {formatNumber(rec.estimated_annual_savings_kg)} kg/yr</span>
+                    <span className="text-xs text-emerald-500 dark:text-emerald-400 font-medium">↓ {formatNumber(rec.estimated_annual_savings_kg)} kg/yr</span>
                   </div>
                 </div>
-                <p className="text-sm text-zinc-300">{rec.action}</p>
+                <p className="text-sm text-zinc-700 dark:text-zinc-300">{rec.action}</p>
               </div>
             </motion.div>
           );

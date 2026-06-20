@@ -36,10 +36,10 @@ export function WhatIfSimulator({ baseInput }: { baseInput: CarbonInput }) {
   };
 
   return (
-    <div className="card border border-zinc-800">
+    <div className="card border border-zinc-200 dark:border-zinc-800">
       <div className="flex items-center gap-2 mb-1">
-        <SlidersHorizontal className="w-4 h-4 text-cyan-400" />
-        <h3 className="font-semibold text-sm text-zinc-200">What-If Simulator</h3>
+        <SlidersHorizontal className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
+        <h3 className="font-semibold text-sm text-zinc-900 dark:text-zinc-200">What-If Simulator</h3>
       </div>
       <p className="text-xs text-zinc-500 mb-4">See the impact of changes before committing.</p>
 
@@ -50,7 +50,7 @@ export function WhatIfSimulator({ baseInput }: { baseInput: CarbonInput }) {
             <button
               type="button"
               onClick={() => setDietOverride("")}
-              className={`py-1.5 rounded-md border text-xs transition-all ${dietOverride === "" ? "border-cyan-500/40 bg-cyan-500/8 text-cyan-300" : "border-zinc-800 text-zinc-500 hover:border-zinc-700"}`}
+              className={`py-1.5 rounded-md border text-xs transition-all ${dietOverride === "" ? "border-cyan-500/40 bg-cyan-500/10 dark:bg-cyan-500/8 text-cyan-600 dark:text-cyan-300" : "border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-500 hover:border-zinc-300 dark:hover:border-zinc-700"}`}
             >
               No Change
             </button>
@@ -60,7 +60,7 @@ export function WhatIfSimulator({ baseInput }: { baseInput: CarbonInput }) {
                 type="button"
                 onClick={() => setDietOverride(o.value)}
                 className={`py-1.5 rounded-md border text-xs transition-all ${
-                  dietOverride === o.value ? "border-cyan-500/40 bg-cyan-500/8 text-cyan-300" : "border-zinc-800 text-zinc-500 hover:border-zinc-700"
+                  dietOverride === o.value ? "border-cyan-500/40 bg-cyan-500/10 dark:bg-cyan-500/8 text-cyan-600 dark:text-cyan-300" : "border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-500 hover:border-zinc-300 dark:hover:border-zinc-700"
                 }`}
               >
                 {o.label}
@@ -75,7 +75,7 @@ export function WhatIfSimulator({ baseInput }: { baseInput: CarbonInput }) {
             <button
               type="button"
               onClick={() => setFuelOverride("")}
-              className={`py-1.5 rounded-md border text-xs transition-all ${fuelOverride === "" ? "border-cyan-500/40 bg-cyan-500/8 text-cyan-300" : "border-zinc-800 text-zinc-500 hover:border-zinc-700"}`}
+              className={`py-1.5 rounded-md border text-xs transition-all ${fuelOverride === "" ? "border-cyan-500/40 bg-cyan-500/10 dark:bg-cyan-500/8 text-cyan-600 dark:text-cyan-300" : "border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-500 hover:border-zinc-300 dark:hover:border-zinc-700"}`}
             >
               Same
             </button>
@@ -85,7 +85,7 @@ export function WhatIfSimulator({ baseInput }: { baseInput: CarbonInput }) {
                 type="button"
                 onClick={() => setFuelOverride(o.value)}
                 className={`py-1.5 rounded-md border text-xs transition-all ${
-                  fuelOverride === o.value ? "border-cyan-500/40 bg-cyan-500/8 text-cyan-300" : "border-zinc-800 text-zinc-500 hover:border-zinc-700"
+                  fuelOverride === o.value ? "border-cyan-500/40 bg-cyan-500/10 dark:bg-cyan-500/8 text-cyan-600 dark:text-cyan-300" : "border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-500 hover:border-zinc-300 dark:hover:border-zinc-700"
                 }`}
               >
                 {o.label}
