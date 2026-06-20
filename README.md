@@ -7,7 +7,6 @@
 > A deterministic, location-aware carbon footprint modelling engine augmented by a generative AI presentation layer.
 
 **Live Environment:** [https://carbon-platform-bddp.onrender.com/](https://carbon-platform-bddp.onrender.com/)  
-**Narrative Component:** [Build-in-Public Retrospective](DUAL_SUBMISSION.md)
 
 ---
 
