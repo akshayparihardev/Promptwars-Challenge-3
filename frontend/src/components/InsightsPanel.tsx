@@ -12,18 +12,17 @@ const DIFFICULTY_META = {
 
 function InsightsPanelInner({ insights }: { insights: InsightsResponse }) {
   return (
-    <div className="flex flex-col gap-4 mt-6 pt-6 border-t border-zinc-800">
+    <div className="flex flex-col gap-4 mt-6 pt-6 border-t border-zinc-800 dark:border-zinc-800">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          {insights.source === "gemini"
-            ? <Sparkles className="w-4 h-4 text-amber-400" />
-            : <Brain className="w-4 h-4 text-purple-400" />
-          }
-          <h3 className="font-semibold text-sm text-zinc-200">Personalized Insights</h3>
+          <Brain className="w-4 h-4 text-purple-500" />
+          <h3 className="font-semibold text-sm text-zinc-900 dark:text-zinc-200">Personalized Insights</h3>
         </div>
-        <span className="text-xs text-zinc-600 bg-zinc-800/80 px-2 py-0.5 rounded">
-          {insights.source === "gemini" ? "Gemini AI" : "Rules Engine"}
-        </span>
+        {insights.source === "gemini" && (
+          <span className="text-xs text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full flex items-center gap-1 font-medium shadow-[0_0_10px_rgba(245,158,11,0.1)]">
+            <Sparkles className="w-3 h-3" /> Gemini AI
+          </span>
+        )}
       </div>
 
       {/* Summary */}

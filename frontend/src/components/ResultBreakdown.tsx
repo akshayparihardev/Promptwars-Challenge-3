@@ -114,6 +114,7 @@ function ResultBreakdownInner({ result }: { result: FootprintResult }) {
                 {pieData.map((e, i) => <Cell key={i} fill={e.color} />)}
               </Pie>
               <Tooltip formatter={(v: number) => [`${formatNumber(v)} kg`]}
+                itemStyle={{ color: "#e4e4e7" }}
                 contentStyle={{ background: "#18181b", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8 }} />
             </PieChart>
           </ResponsiveContainer>
@@ -132,6 +133,7 @@ function ResultBreakdownInner({ result }: { result: FootprintResult }) {
               <XAxis dataKey="name" tick={{ fill: "var(--text-3)", fontSize: 11 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fill: "var(--text-3)", fontSize: 11 }} axisLine={false} tickLine={false} width={28} unit="t" />
               <Tooltip cursor={{ fill: "rgba(255,255,255,0.02)" }}
+                itemStyle={{ color: "#e4e4e7" }}
                 contentStyle={{ background: "#18181b", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8 }}
                 formatter={(v: number) => [`${v} t CO₂e`]} />
               <Bar dataKey="value" radius={[4,4,0,0]}>

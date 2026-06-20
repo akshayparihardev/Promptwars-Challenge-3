@@ -127,9 +127,9 @@ def _call_gemini(
     from google import genai
     from google.genai import types
 
-    client = genai.Client(
-        vertexai=True, project=settings.project_id, location=settings.region
-    )
+    # Initialize with API key instead of Vertex AI (no ADC required)
+    client = genai.Client(api_key=settings.gemini_api_key)
+    
     response = client.models.generate_content(
         model=settings.gemini_model,
         contents=_build_prompt(data, result),
@@ -162,10 +162,10 @@ def _call_gemini(
 
 
 def generate_insights(
-    data: CarbonInput, result: FootprintResult, settings: Settings
+    data: CarbonInput, result: FootprintResult, settings: Settings, use_ai: bool = True
 ) -> InsightsResponse:
     """Return personalized insights, preferring Gemini and falling back to rules."""
-    if not settings.use_gemini:
+    if not use_ai or not settings.use_gemini or not settings.gemini_api_key:
         return generate_rule_based_insights(data, result)
     try:
         return _call_gemini(data, result, settings)

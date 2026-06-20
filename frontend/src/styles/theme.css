@@ -11,6 +11,27 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
 /* ── Design tokens ── */
 :root {
+  --bg:          #ffffff;
+  --bg-1:        #f4f4f5;
+  --bg-2:        #e4e4e7;
+  --surface:     #ffffff;
+  --surface-2:   #fafafa;
+  --border:      #e4e4e7;
+  --border-2:    #d4d4d8;
+  --accent:      #16a34a;
+  --accent-dim:  rgba(22,163,74,0.1);
+  --accent-hover:rgba(22,163,74,0.15);
+  --cyan:        #0891b2;
+  --cyan-dim:    rgba(8,145,178,0.1);
+  --purple:      #7c3aed;
+  --amber:       #d97706;
+  --red:         #dc2626;
+  --text:        #09090b;
+  --text-2:      #52525b;
+  --text-3:      #a1a1aa;
+}
+
+.dark {
   --bg:          #09090b;
   --bg-1:        #0c0c0f;
   --bg-2:        #131316;

@@ -29,6 +29,7 @@ class Settings(BaseSettings):
     use_firestore: bool = True
     use_bigquery: bool = False
     gemini_model: str = "gemini-2.5-flash"
+    gemini_api_key: str | None = None
 
     # CORS (the SPA is same-origin in prod; this matters for local dev).
     allowed_origins: str = "http://localhost:5173,http://127.0.0.1:5173"

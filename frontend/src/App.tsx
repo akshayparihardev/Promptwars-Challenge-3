@@ -1,10 +1,10 @@
-import { useState, lazy, Suspense } from 'react'
+import { useState, lazy, Suspense, useEffect } from 'react'
 import { CalculatorForm } from './components/CalculatorForm'
 import { HistoryPanel } from './components/HistoryPanel'
 import { useFootprint } from './hooks/useFootprint'
 import { Entry, emptyInput, CarbonInput } from './lib/types'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Leaf } from 'lucide-react'
+import { Leaf, Moon, Sun } from 'lucide-react'
 
 // Lazy-load heavy visualisation components for code-splitting
 const ResultBreakdown = lazy(() => import('./components/ResultBreakdown').then(m => ({ default: m.ResultBreakdown })))
@@ -16,6 +16,31 @@ const CarbonCard = lazy(() => import('./components/CarbonCard').then(m => ({ def
 function App() {
   const { calculate, loading, error, result, insights, gamification } = useFootprint()
   const [currentInput, setCurrentInput] = useState<CarbonInput>(emptyInput())
+  const [isDark, setIsDark] = useState(true)
+
+  useEffect(() => {
+    const saved = localStorage.getItem('theme')
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const initialDark = saved ? saved === 'dark' : prefersDark
+    setIsDark(initialDark)
+    if (initialDark) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [])
+
+  const toggleTheme = () => {
+    const next = !isDark
+    setIsDark(next)
+    if (next) {
+      document.documentElement.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
+    }
+  }
 
   const handleSubmit = (input: CarbonInput) => {
     setCurrentInput(input)
@@ -38,7 +63,7 @@ function App() {
       <header>
       <nav aria-label="Main navigation" style={{
         position: "sticky", top: 0, zIndex: 50,
-        background: "rgba(9,9,11,0.92)", backdropFilter: "blur(12px)",
+        background: "rgba(var(--bg), 0.92)", backdropFilter: "blur(12px)",
         borderBottom: "1px solid var(--border)",
         padding: "0 24px", height: 52,
         display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -49,9 +74,18 @@ function App() {
             CarbonZero
           </span>
         </div>
-        <span style={{ fontSize: 11, color: "var(--text-3)", fontWeight: 500 }}>
-          v1.0
-        </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <button 
+            onClick={toggleTheme}
+            style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-2)' }}
+            aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+          >
+            {isDark ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+          <span style={{ fontSize: 11, color: "var(--text-3)", fontWeight: 500 }}>
+            v1.0
+          </span>
+        </div>
       </nav>
       </header>
 
