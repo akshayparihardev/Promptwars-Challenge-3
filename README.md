@@ -81,6 +81,25 @@ Browser (React 18 + TS, Vite, Recharts)    Cloud Run (Single Container)
 
 One container serves both the API and the static SPA, ensuring a single origin (no CORS) and maximum efficiency. **There are absolutely no API keys or secrets in the repository.**
 
+### Project layout
+```text
+backend/    FastAPI app — carbon engine, insights, repository, routes, zero-hardcoding tests
+frontend/   React + TS SPA — WhatIf simulator, Framer Motion, Recharts, a11y components
+docs/       Architecture notes and engineering principles
+Dockerfile  Multi-stage build (Node build → slim Python runtime, non-root user)
+.github/    CI Pipeline: lint + types + zero-hardcode tests + build on every push
+```
+
+### Key endpoints
+| Method & path | Purpose |
+| --- | --- |
+| `POST /api/calculate` | Footprint breakdown for the supplied inputs (pure math engine) |
+| `POST /api/whatif` | What-If Simulator returning precise `delta_kg` |
+| `POST /api/insights` | Personalized reduction advice (Gemini restricted to formatting) |
+| `POST /api/entries` | Save a snapshot for an anonymous device (via BackgroundTasks) |
+| `GET /api/entries/{id}` | List a device's history (newest first) |
+| `GET /api/health` | Liveness/readiness probe |
+
 ---
 
 ## 4. Running locally
@@ -99,6 +118,13 @@ USE_GEMINI=false USE_FIRESTORE=false uvicorn app.main:app --reload
 cd frontend
 npm install
 npm run dev      # proxies /api to http://localhost:8000
+```
+
+**Or the whole thing as one container:**
+```bash
+docker build -t carbon-platform .
+docker run -p 8080:8080 -e USE_GEMINI=false -e USE_FIRESTORE=false carbon-platform
+# open http://localhost:8080
 ```
 
 ---
@@ -131,7 +157,16 @@ gcloud run deploy carbon-platform \
 
 ---
 
-## 7. AI Evaluation Rubric Alignment
+## 7. Assumptions made
+
+- **Context-First Math:** Grid factors are strictly tied to geographic assumptions. India uses 0.820 kg/kWh (CEA), UK uses 0.233 kg/kWh, and default relies on the global average (0.450 kg/kWh).
+- **Zero Hallucination Guardrails:** Gemini is treated as an untrusted formatting engine. It is completely blocked from computing carbon math; the backend engine derives all limits beforehand.
+- **Anonymous by design.** No login is required. A randomly generated device ID (stored in `localStorage`) keys a user's history, minimizing personal data collection.
+- **Graceful Fallback:** If Vertex AI quotas are hit, the system deterministically falls back to pure `rules.py` text generation. 
+
+---
+
+## 8. AI Evaluation Rubric Alignment
 
 | Criterion | Evidence in Codebase |
 |---|---|
