@@ -180,6 +180,39 @@ function App() {
 
                 <Suspense fallback={<div style={{ textAlign: 'center', color: 'var(--text-3)', padding: 32 }}>Loading results…</div>}>
                 <div className="glass" style={{ padding: 28 }}>
+
+                  {/* Gemini AI indicator — only when insights are AI-generated */}
+                  {insights?.source === "gemini" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8,
+                        marginBottom: 18,
+                        padding: "8px 14px",
+                        borderRadius: 10,
+                        background: "linear-gradient(135deg, rgba(245,158,11,0.08), rgba(168,85,247,0.08))",
+                        border: "1px solid rgba(245,158,11,0.15)",
+                        width: "fit-content",
+                      }}
+                    >
+                      <Sparkles size={14} style={{ color: "#f59e0b" }} />
+                      <span style={{
+                        fontSize: 12,
+                        fontWeight: 600,
+                        letterSpacing: "0.02em",
+                        background: "linear-gradient(135deg, #f59e0b, #a855f7)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }}>
+                        Personalized Insights powered by Gemini AI
+                      </span>
+                    </motion.div>
+                  )}
+
                   <ResultBreakdown result={result} />
                   {insights && <InsightsPanel insights={insights} />}
                   {gamification && <GamificationPanel data={gamification} />}
