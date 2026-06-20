@@ -50,27 +50,18 @@ _SYSTEM_INSTRUCTION = (
     "Exactly 3 recommendations, ordered by saving_kg_co2 descending."
 )
 
-_RESPONSE_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "summary": {"type": "string"},
-        "comparison": {"type": "string"},
-        "recommendations": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "category": {"type": "string"},
-                    "action": {"type": "string"},
-                    "saving_kg_co2": {"type": "integer"},
-                    "difficulty": {"type": "string"},
-                },
-                "required": ["category", "action", "saving_kg_co2"],
-            },
-        },
-    },
-    "required": ["summary", "comparison", "recommendations"],
-}
+from pydantic import BaseModel
+
+class RecommendationSchema(BaseModel):
+    category: str
+    action: str
+    saving_kg_co2: int
+    difficulty: str
+
+class ResponseSchema(BaseModel):
+    summary: str
+    comparison: str
+    recommendations: list[RecommendationSchema]
 
 
 def _build_prompt(data: CarbonInput, result: FootprintResult) -> str:
@@ -136,7 +127,7 @@ def _call_gemini(
         config=types.GenerateContentConfig(
             system_instruction=_SYSTEM_INSTRUCTION,
             response_mime_type="application/json",
-            response_schema=_RESPONSE_SCHEMA,
+            response_schema=ResponseSchema,
             temperature=0.4,
             max_output_tokens=4096,
         ),
