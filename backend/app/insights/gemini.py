@@ -50,18 +50,7 @@ _SYSTEM_INSTRUCTION = (
     "Exactly 3 recommendations, ordered by saving_kg_co2 descending."
 )
 
-from pydantic import BaseModel
 
-class RecommendationSchema(BaseModel):
-    category: str
-    action: str
-    saving_kg_co2: int
-    difficulty: str
-
-class ResponseSchema(BaseModel):
-    summary: str
-    comparison: str
-    recommendations: list[RecommendationSchema]
 
 
 def _build_prompt(data: CarbonInput, result: FootprintResult) -> str:
@@ -127,7 +116,6 @@ def _call_gemini(
         config=types.GenerateContentConfig(
             system_instruction=_SYSTEM_INSTRUCTION,
             response_mime_type="application/json",
-            response_schema=ResponseSchema,
             temperature=0.4,
             max_output_tokens=4096,
         ),
