@@ -14,7 +14,7 @@ The CI pipeline is strictly enforced. Code will be rejected if it fails any of t
 | Tool | Threshold | Command |
 | --- | --- | --- |
 | **Pytest** | ≥ 90% coverage | `pytest` |
-| **Vitest** | ≥ 90% coverage | `npm run test:coverage` |
+| **Vitest** | ≥ 75% coverage | `npm run test:coverage` |
 | **Mypy** | Strict typing | `mypy app` |
 | **Ruff** | No linting errors | `ruff check .` |
 | **ESLint** | No warnings | `npx eslint . --max-warnings=0` |

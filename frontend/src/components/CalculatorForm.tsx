@@ -125,6 +125,7 @@ export function CalculatorForm({ onSubmit, loading }: Props) {
       {/* CTA */}
       <button className="btn" type="submit"
         disabled={loading || !input.location.trim()}
+        aria-busy={loading}
         style={{ width: "100%", fontSize: 13, padding: "12px 20px" }}>
         {loading
           ? <><div style={{ width:14,height:14,border:"2px solid rgba(0,0,0,0.25)",borderTopColor:"#09090b",borderRadius:"50%" }} className="animate-spin" /> Calculating…</>

@@ -12,7 +12,7 @@
 
 ## 1. Executive Summary
 
-This platform enables individuals to quantify, track, and strategically reduce their carbon emissions. Built on a modernized, cloud-native stack (FastAPI, React 18, Google Cloud Run), the application leverages a strict **Hybrid AI Architecture** to eliminate LLM hallucinations while delivering highly personalized, actionable insights via Google Gemini 2.5 Flash on Vertex AI.
+This platform enables individuals to quantify, track, and strategically reduce their carbon emissions. Built on a modernized, containerized stack (FastAPI, React 18, Render), the application leverages a strict **Hybrid AI Architecture** to eliminate LLM hallucinations while delivering highly personalized, actionable insights via Google Gemini 2.5 Flash.
 
 ---
 
@@ -38,16 +38,16 @@ The application provides real-time, debounced differential analysis via the `POS
 The service compiles the frontend React SPA and the FastAPI backend into a single containerized artifact. This eliminates cross-origin resource sharing (CORS) overhead and ensures an atomic deployment footprint.
 
 ```text
-Client (React 18, Vite, Framer)            Google Cloud Run (Unified Container)
+Client (React 18, Vite, Framer)            Render (Unified Container)
   • Debounced What-If Simulator       ──►  FastAPI Service Interface
   • Anonymous State Tracking                ├─ POST /api/calculate (Pure Engine)
                                             ├─ POST /api/whatif    (Simulation)
-                                            ├─ POST /api/insights  (Vertex AI Proxy)
+                                            ├─ POST /api/insights  (Gemini API Proxy)
                                             ├─ POST /api/entries   (Firestore Write)
                                             └─ GET  /api/health    (Liveness Probe)
                                                 │
-                                                ├─► Vertex AI (Gemini via ADC)
-                                                └─► Firestore (Persistence via ADC)
+                                                ├─► Gemini 2.5 Flash (via API Key)
+                                                └─► Firestore (Persistence)
 ```
 
 ### 3.1 Repository Structure
@@ -86,12 +86,11 @@ docker build -t carbon-platform .
 docker run -p 8080:8080 -e USE_GEMINI=false -e USE_FIRESTORE=false carbon-platform
 ```
 
-### Cloud Run Deployment
-```bash
-gcloud run deploy carbon-platform \
-    --source . --region us-central1 --allow-unauthenticated \
-    --set-env-vars PROJECT_ID=<project-id>,REGION=us-central1,USE_GEMINI=true,USE_FIRESTORE=true
-```
+### Render Deployment
+The application is deployed on Render as a Docker web service. Configure the following environment variables in the Render dashboard:
+- `GEMINI_API_KEY` — Google AI Studio API key for Gemini 2.5 Flash
+- `PROJECT_ID` — GCP project ID for Firestore persistence
+- `USE_GEMINI=true` and `USE_FIRESTORE=true` — enable cloud services
 
 ---
 
@@ -110,9 +109,9 @@ To ensure absolute reliability, the CI pipeline enforces strict static analysis 
 
 ## 6. Security Posture & Assumptions
 
-- **Identity Management:** The application securely injects API credentials via environment variables (`GEMINI_API_KEY`). There are no hardcoded API keys, tokens, or service accounts within the source repository.
+- **Identity Management:** The application securely injects the Gemini API key via the `GEMINI_API_KEY` environment variable. There are no hardcoded API keys, tokens, or service accounts within the source repository.
 - **Data Privacy:** User instances are tracked utilizing a randomized, anonymized device identifier stored locally in `localStorage`. 
-- **Graceful Fault Tolerance:** Should Vertex AI encounter throttling or unavailability, the system falls back seamlessly to a secondary rule-based engine, guaranteeing uninterrupted service to the user.
+- **Graceful Fault Tolerance:** Should the Gemini API encounter throttling or unavailability, the system falls back seamlessly to a secondary rule-based engine, guaranteeing uninterrupted service to the user.
 - **API Guardrails:** All incoming payloads are strictly validated using `Pydantic v2` numerical bounds, and traffic is rate-limited via `slowapi` to prevent abusive execution loads.
 
 ---
@@ -124,7 +123,7 @@ To ensure absolute reliability, the CI pipeline enforces strict static analysis 
 | **PS Alignment** | Hyper-local contextual modelling via `LocationContext`; actionable lifecycle loop via the What-If simulation engine. |
 | **Code Quality** | Strict type adherence, pure function logic, multi-stage Docker builds, and fully cited external emission constants. |
 | **Efficiency** | Asynchronous `BackgroundTasks` for non-blocking I/O, `lru_cache` optimization, and React lazy-loading. |
-| **Security & Testing** | ADC, rate limiting, and mathematical validation test suites verifying dynamic derivations. |
+| **Security & Testing** | Environment-variable credential injection, rate limiting, and mathematical validation test suites verifying dynamic derivations. |
 | **Accessibility** | Implemented `prefers-reduced-motion`, `aria-live` assertive regions, and comprehensive keyboard traversal mapping. |
 
 ---

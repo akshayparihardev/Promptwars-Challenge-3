@@ -43,11 +43,11 @@ function ResultBreakdownInner({ result }: { result: FootprintResult }) {
   const ratioColor = ratio < 0.9 ? "#4ade80" : ratio > 1.1 ? "#f87171" : "#fbbf24";
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 28 }} role="region" aria-labelledby="result-heading">
 
       {/* ── Hero number ── */}
       <div style={{ textAlign: "center" }}>
-        <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: 6 }}>
+        <p id="result-heading" style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: 6 }}>
           Annual Carbon Footprint
         </p>
         <motion.div
@@ -80,8 +80,8 @@ function ResultBreakdownInner({ result }: { result: FootprintResult }) {
       <div className="flex flex-col md:grid md:grid-cols-[1fr_150px] gap-5 items-start">
 
         {/* Bars */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%" }}>
-          <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: 0 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%" }} aria-labelledby="breakdown-heading">
+          <p id="breakdown-heading" style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: 0 }}>
             Breakdown
           </p>
           {cats.map((c, i) => {
@@ -119,11 +119,22 @@ function ResultBreakdownInner({ result }: { result: FootprintResult }) {
             </PieChart>
           </ResponsiveContainer>
         </div>
+
+        {/* Accessible data-table fallback for screen readers */}
+        <table style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }} aria-label="Carbon footprint breakdown by category">
+          <thead><tr><th>Category</th><th>kg CO₂e</th><th>% of total</th></tr></thead>
+          <tbody>
+            {cats.map(c => {
+              const pct = result.total_annual_kg > 0 ? ((c.kg / result.total_annual_kg) * 100).toFixed(1) : "0";
+              return <tr key={c.key}><td>{c.label}</td><td>{formatNumber(c.kg)}</td><td>{pct}%</td></tr>;
+            })}
+          </tbody>
+        </table>
       </div>
 
       {/* ── Benchmark comparison ── */}
-      <div>
-        <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: 12 }}>
+      <div aria-labelledby="comparison-heading">
+        <p id="comparison-heading" style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: 12 }}>
           How you compare
         </p>
         <div style={{ height: 130 }} role="img" aria-label={`Bar chart comparing your footprint of ${total_t.toFixed(2)} tonnes to regional and global benchmarks`}>
@@ -145,8 +156,8 @@ function ResultBreakdownInner({ result }: { result: FootprintResult }) {
       </div>
 
       {/* ── Equivalencies ── */}
-      <div>
-        <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: 12 }}>
+      <div aria-labelledby="equivalencies-heading">
+        <p id="equivalencies-heading" style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: 12 }}>
           What this equals
         </p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">

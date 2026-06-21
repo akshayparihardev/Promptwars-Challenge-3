@@ -46,8 +46,8 @@ describe('ResultBreakdown', () => {
 
   it('shows the breakdown categories', () => {
     render(<ResultBreakdown result={mockResult} />);
-    expect(screen.getByText('Transport')).toBeInTheDocument();
-    expect(screen.getByText('Diet')).toBeInTheDocument();
+    expect(screen.getAllByText('Transport').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('Diet').length).toBeGreaterThanOrEqual(1);
   });
 
   it('shows comparison to global average', () => {

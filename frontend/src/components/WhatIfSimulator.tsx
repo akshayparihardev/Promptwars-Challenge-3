@@ -44,8 +44,8 @@ export function WhatIfSimulator({ baseInput }: { baseInput: CarbonInput }) {
       <p className="text-xs text-zinc-500 mb-4">See the impact of changes before committing.</p>
 
       <div className="flex flex-col gap-3.5 mb-4">
-        <div>
-          <label className="label">Switch diet to</label>
+        <div role="group" aria-label="Switch diet to">
+          <span className="label">Switch diet to</span>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
             <button
               type="button"
@@ -69,8 +69,8 @@ export function WhatIfSimulator({ baseInput }: { baseInput: CarbonInput }) {
           </div>
         </div>
 
-        <div>
-          <label className="label">Switch fuel to</label>
+        <div role="group" aria-label="Switch fuel to">
+          <span className="label">Switch fuel to</span>
           <div className="flex flex-wrap md:grid md:grid-cols-5 gap-1">
             <button
               type="button"
