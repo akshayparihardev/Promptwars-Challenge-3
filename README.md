@@ -1,4 +1,4 @@
-# 🌍 Carbon Footprint Awareness Platform
+# 🌍🍃 Carbon Footprint Awareness Platform ♻️🌱
 
 [![CI](https://github.com/akshayparihardev/Promptwars-Challenge-3/actions/workflows/ci.yml/badge.svg)](https://github.com/akshayparihardev/Promptwars-Challenge-3/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
