@@ -1,4 +1,4 @@
-# Carbon Footprint Awareness Platform
+# 🌍 Carbon Footprint Awareness Platform
 
 [![CI](https://github.com/akshayparihardev/Promptwars-Challenge-3/actions/workflows/ci.yml/badge.svg)](https://github.com/akshayparihardev/Promptwars-Challenge-3/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -10,13 +10,13 @@
 
 ---
 
-## 1. Chosen Vertical: Executive Summary
+## 🎯 1. Chosen Vertical: Executive Summary
 
 This platform enables individuals to quantify, track, and strategically reduce their carbon emissions. Built on a modernized, containerized stack (FastAPI, React 18, Render), the application leverages a strict **Hybrid AI Architecture** to eliminate LLM hallucinations while delivering highly personalized, actionable insights via Google Gemini 2.5 Flash.
 
 ---
 
-## 2. Approach and Logic: Core Architectural Principles
+## 🧠 2. Approach and Logic: Core Architectural Principles
 
 Our design philosophy strictly adheres to principles of immutability, zero-trust mathematical modelling, and graceful degradation.
 
@@ -33,7 +33,7 @@ The application provides real-time, debounced differential analysis via the `POS
 
 ---
 
-## 3. How the Solution Works: System Architecture
+## ⚙️ 3. How the Solution Works: System Architecture
 
 The service compiles the frontend React SPA and the FastAPI backend into a single containerized artifact. This eliminates cross-origin resource sharing (CORS) overhead and ensures an atomic deployment footprint.
 
@@ -61,7 +61,7 @@ Dockerfile  Multi-stage, slim Python 3.11 build executing as a non-root user.
 
 ---
 
-## 4. Environment Setup & Deployment
+## 🚀 4. Environment Setup & Deployment
 
 ### Local Development
 **Backend** (Python 3.11+):
@@ -94,7 +94,7 @@ The application is deployed on Render as a Docker web service. Configure the fol
 
 ---
 
-## 5. Verification & Quality Assurance
+## 🛡️ 5. Verification & Quality Assurance
 
 To ensure absolute reliability, the CI pipeline enforces strict static analysis and an exhaustive test suite.
 
@@ -107,7 +107,7 @@ To ensure absolute reliability, the CI pipeline enforces strict static analysis 
 
 ---
 
-## 6. Assumptions Made & Security Posture
+## 🔒 6. Assumptions Made & Security Posture
 
 - **Identity Management:** The application securely injects the Gemini API key via the `GEMINI_API_KEY` environment variable. There are no hardcoded API keys, tokens, or service accounts within the source repository.
 - **Data Privacy:** User instances are tracked utilizing a randomized, anonymized device identifier stored locally in `localStorage`. 
@@ -116,7 +116,7 @@ To ensure absolute reliability, the CI pipeline enforces strict static analysis 
 
 ---
 
-## 7. Rubric Alignment Summary
+## 📊 7. Rubric Alignment Summary
 
 | Focus Area | Engineering Implementation |
 |---|---|
