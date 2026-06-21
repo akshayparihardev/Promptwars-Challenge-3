@@ -10,13 +10,13 @@
 
 ---
 
-## 1. Executive Summary
+## 1. Chosen Vertical: Executive Summary
 
 This platform enables individuals to quantify, track, and strategically reduce their carbon emissions. Built on a modernized, containerized stack (FastAPI, React 18, Render), the application leverages a strict **Hybrid AI Architecture** to eliminate LLM hallucinations while delivering highly personalized, actionable insights via Google Gemini 2.5 Flash.
 
 ---
 
-## 2. Core Architectural Principles
+## 2. Approach and Logic: Core Architectural Principles
 
 Our design philosophy strictly adheres to principles of immutability, zero-trust mathematical modelling, and graceful degradation.
 
@@ -33,7 +33,7 @@ The application provides real-time, debounced differential analysis via the `POS
 
 ---
 
-## 3. System Architecture
+## 3. How the Solution Works: System Architecture
 
 The service compiles the frontend React SPA and the FastAPI backend into a single containerized artifact. This eliminates cross-origin resource sharing (CORS) overhead and ensures an atomic deployment footprint.
 
@@ -107,7 +107,7 @@ To ensure absolute reliability, the CI pipeline enforces strict static analysis 
 
 ---
 
-## 6. Security Posture & Assumptions
+## 6. Assumptions Made & Security Posture
 
 - **Identity Management:** The application securely injects the Gemini API key via the `GEMINI_API_KEY` environment variable. There are no hardcoded API keys, tokens, or service accounts within the source repository.
 - **Data Privacy:** User instances are tracked utilizing a randomized, anonymized device identifier stored locally in `localStorage`. 
